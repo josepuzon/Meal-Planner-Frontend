@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.form-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+.form-container form div {
+  margin-bottom: 1rem;
+}
+.form-container label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.form-container input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
