@@ -12,7 +12,7 @@ function Dashboard() {
           <li><Link to="/meal-plans">View Meal Plans</Link></li>
           <li><Link to="/recipes">Explore Recipes</Link></li>
           <li><Link to="/profile">Edit Profile</Link></li>
-          <li><Link to="/pantry">Manage Pantry</Link></li> {/* pantry will come later */}
+          <li><Link to="/pantry">Manage Pantry</Link></li>
         </ul>
       </div>
 
