@@ -8,11 +8,8 @@ function Profile() {
   const [allergies, setAllergies] = useState([]);
   const [dislikedIngredients, setDislikedIngredients] = useState([]);
 
-  // Load from backend into form state
   useEffect(() => {
-    if (user?.id) {
-      fetchProfile();
-    }
+    if (user?.id) fetchProfile();
   }, [fetchProfile, user?.id]);
 
   useEffect(() => {
@@ -23,25 +20,48 @@ function Profile() {
     }
   }, [user]);
 
+  const cleanList = (list, type) =>
+    list.map((item) => {
+      const isMarkedForDestroy = item._destroy || false;
+      switch (type) {
+        case "dietary":
+          return {
+            id: item.id,
+            pref_name: item.pref_name || item.name,
+            _destroy: isMarkedForDestroy,
+          };
+        case "allergy":
+          return {
+            id: item.id,
+            allergy_name: item.allergy_name || item.name,
+            _destroy: isMarkedForDestroy,
+          };
+        case "disliked":
+          return {
+            id: item.id,
+            ingredient_name: item.ingredient_name || item.name,
+            _destroy: isMarkedForDestroy,
+          };
+        default:
+          return {};
+      }
+    });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const profileData = {
-      dietary_preferences: dietaryPreferences,
-      allergies,
-      disliked_ingredients: dislikedIngredients,
+      dietary_preferences_attributes: cleanList(dietaryPreferences, "dietary"),
+      allergies_attributes: cleanList(allergies, "allergy"),
+      disliked_ingredients_attributes: cleanList(dislikedIngredients, "disliked"),
     };
 
     const result = await updateProfile(profileData);
 
-    if (result.success) {
-      alert("Profile updated!");
-    } else {
-      alert("Update failed: " + result.error);
-    }
+    if (result.success) alert("Profile updated!");
+    else alert("Update failed: " + result.error);
   };
 
-  // Helpers to add/remove items
   const handleAdd = (setter, list) => {
     setter([...list, { name: "" }]);
   };
@@ -53,11 +73,18 @@ function Profile() {
   };
 
   const handleRemove = (setter, list, index) => {
-    const updated = list.filter((_, i) => i !== index);
+    const updated = [...list];
+    if (updated[index].id) {
+      updated[index]._destroy = true;
+    } else {
+      updated.splice(index, 1);
+    }
     setter(updated);
   };
 
   if (!user) return <p>Loading profile...</p>;
+
+  const visibleList = (list) => list.filter((item) => !item._destroy);
 
   return (
     <div>
@@ -70,7 +97,7 @@ function Profile() {
       <form onSubmit={handleSubmit}>
         {/* Dietary Preferences */}
         <h3>Dietary Preferences</h3>
-        {dietaryPreferences.map((pref, idx) => (
+        {visibleList(dietaryPreferences).map((pref, idx) => (
           <div key={idx}>
             <input
               type="text"
@@ -79,7 +106,9 @@ function Profile() {
                 handleChange(setDietaryPreferences, dietaryPreferences, idx, e.target.value)
               }
             />
-            <button type="button" onClick={() => handleRemove(setDietaryPreferences, dietaryPreferences, idx)}>Remove</button>
+            <button type="button" onClick={() => handleRemove(setDietaryPreferences, dietaryPreferences, idx)}>
+              Remove
+            </button>
           </div>
         ))}
         <button type="button" onClick={() => handleAdd(setDietaryPreferences, dietaryPreferences)}>
@@ -88,7 +117,7 @@ function Profile() {
 
         {/* Allergies */}
         <h3>Allergies</h3>
-        {allergies.map((allergy, idx) => (
+        {visibleList(allergies).map((allergy, idx) => (
           <div key={idx}>
             <input
               type="text"
@@ -97,7 +126,9 @@ function Profile() {
                 handleChange(setAllergies, allergies, idx, e.target.value)
               }
             />
-            <button type="button" onClick={() => handleRemove(setAllergies, allergies, idx)}>Remove</button>
+            <button type="button" onClick={() => handleRemove(setAllergies, allergies, idx)}>
+              Remove
+            </button>
           </div>
         ))}
         <button type="button" onClick={() => handleAdd(setAllergies, allergies)}>
@@ -106,7 +137,7 @@ function Profile() {
 
         {/* Disliked Ingredients */}
         <h3>Disliked Ingredients</h3>
-        {dislikedIngredients.map((item, idx) => (
+        {visibleList(dislikedIngredients).map((item, idx) => (
           <div key={idx}>
             <input
               type="text"
@@ -115,7 +146,9 @@ function Profile() {
                 handleChange(setDislikedIngredients, dislikedIngredients, idx, e.target.value)
               }
             />
-            <button type="button" onClick={() => handleRemove(setDislikedIngredients, dislikedIngredients, idx)}>Remove</button>
+            <button type="button" onClick={() => handleRemove(setDislikedIngredients, dislikedIngredients, idx)}>
+              Remove
+            </button>
           </div>
         ))}
         <button type="button" onClick={() => handleAdd(setDislikedIngredients, dislikedIngredients)}>

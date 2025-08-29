@@ -1,81 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import useMealPlanStore from "../store/mealPlanStore";
-import useRecipeStore from "../store/recipeStore";
 
 function MealPlans() {
-  const { mealPlans, addMealPlan, removeMealPlan } = useMealPlanStore();
-  const { recipes } = useRecipeStore();
+  const { mealPlans, fetchMealPlans, generateMealPlan, removeMealPlan } =
+    useMealPlanStore();
 
-  const [name, setName] = useState("");
-  const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
+  useEffect(() => {
+    fetchMealPlans();
+  }, [fetchMealPlans]);
 
-  const handleAdd = (e) => {
-    e.preventDefault();
-    if (!name) return;
-
-    const selectedRecipes = recipes.filter((r) =>
-      selectedRecipeIds.includes(r.id.toString())
-    );
-
-    addMealPlan({
-      id: Date.now(),
-      name,
-      recipes: selectedRecipes,
-    });
-
-    setName("");
-    setSelectedRecipeIds([]);
-  };
-
-  const toggleRecipeSelection = (id) => {
-    setSelectedRecipeIds((prev) =>
-      prev.includes(id.toString())
-        ? prev.filter((rid) => rid !== id.toString())
-        : [...prev, id.toString()]
-    );
+  const handleGenerate = async () => {
+    const newPlan = await generateMealPlan();
+    if (newPlan) alert("Meal plan generated!");
   };
 
   return (
     <div style={{ padding: "1rem" }}>
       <h2>Meal Plans</h2>
+      <button onClick={handleGenerate}>Generate 1-Day Meal Plan</button>
 
-      <form onSubmit={handleAdd} style={{ marginBottom: "1rem" }}>
-        <input
-          type="text"
-          placeholder="Meal Plan Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+      {mealPlans.length === 0 && <p>No meal plans yet.</p>}
 
-        <h4>Select Recipes:</h4>
-        {recipes.length === 0 && <p>No recipes available. Add some first!</p>}
-        {recipes.map((r) => (
-          <label key={r.id} style={{ display: "block" }}>
-            <input
-              type="checkbox"
-              checked={selectedRecipeIds.includes(r.id.toString())}
-              onChange={() => toggleRecipeSelection(r.id)}
-            />
-            {r.title}
-          </label>
-        ))}
+      {mealPlans.map((plan) => (
+        <div
+          key={plan.id}
+          style={{
+            marginTop: "2rem",
+            border: "1px solid #ccc",
+            padding: "1rem",
+          }}
+        >
+          <h3>Meal Plan ID: {plan.id}</h3>
 
-        <button type="submit">Add Meal Plan</button>
-      </form>
-
-      <ul>
-        {mealPlans.map((m) => (
-          <li key={m.id}>
-            <strong>{m.name}</strong>
-            <ul>
-              {m.recipes.map((r) => (
-                <li key={r.id}>{r.title}</li>
+          {plan.meal_plan_recipes?.length > 0 ? (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {plan.meal_plan_recipes.map((mpr) => (
+                <li
+                  key={mpr.id}
+                  style={{
+                    marginBottom: "1rem",
+                    padding: "0.5rem",
+                    background: "#f9f9f9",
+                    borderRadius: "4px",
+                  }}
+                >
+                  <h4>{mpr.recipe?.title || "Untitled Recipe"}</h4>
+                  <p style={{ whiteSpace: "pre-line" }}>
+                    {mpr.recipe?.instructions || "No instructions provided."}
+                  </p>
+                </li>
               ))}
             </ul>
-            <button onClick={() => removeMealPlan(m.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+          ) : (
+            <p>No recipes in this plan.</p>
+          )}
+
+          <button onClick={() => removeMealPlan(plan.id)}>
+            Delete Meal Plan
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
