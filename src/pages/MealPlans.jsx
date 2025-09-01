@@ -32,6 +32,20 @@ function MealPlans() {
         >
           <h3>Meal Plan ID: {plan.id}</h3>
 
+          {/* Start and End Date */}
+          <p>
+            <strong>Start Date:</strong>{" "}
+            {plan.start_date
+              ? new Date(plan.start_date).toLocaleDateString()
+              : "N/A"}
+          </p>
+          <p>
+            <strong>End Date:</strong>{" "}
+            {plan.end_date
+              ? new Date(plan.end_date).toLocaleDateString()
+              : "N/A"}
+          </p>
+
           {plan.meal_plan_recipes?.length > 0 ? (
             <ul style={{ listStyle: "none", padding: 0 }}>
               {plan.meal_plan_recipes.map((mpr) => (
@@ -45,6 +59,26 @@ function MealPlans() {
                   }}
                 >
                   <h4>{mpr.recipe?.title || "Untitled Recipe"}</h4>
+
+                  {/* Ingredients */}
+                  {mpr.recipe?.recipe_ingredients?.length > 0 ? (
+                    <div>
+                      <strong>Ingredients:</strong>
+                      <ul>
+                        {mpr.recipe.recipe_ingredients.map((ri) => (
+                          <li key={ri.id}>
+                            {ri.quantity} {ri.unit}{" "}
+                            {ri.ingredient?.ingredient_name ||
+                              "Unnamed ingredient"}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p>No ingredients provided.</p>
+                  )}
+
+                  {/* Instructions */}
                   <p style={{ whiteSpace: "pre-line" }}>
                     {mpr.recipe?.instructions || "No instructions provided."}
                   </p>
