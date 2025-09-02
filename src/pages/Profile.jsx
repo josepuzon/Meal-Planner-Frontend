@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import useAuthStore from "../store/useAuthStore";
 
 function Profile() {
-  const { user, fetchProfile, updateProfile } = useAuthStore();
+  const { user, fetchProfile, updateProfile, healthGoals, fetchHealthGoals } = useAuthStore();
 
   const [dietaryPreferences, setDietaryPreferences] = useState([]);
   const [allergies, setAllergies] = useState([]);
   const [dislikedIngredients, setDislikedIngredients] = useState([]);
+  const [formData, setFormData] = useState({
+    health_goal_id: "",
+  });
 
   useEffect(() => {
     if (user?.id) fetchProfile();
@@ -17,8 +20,15 @@ function Profile() {
       setDietaryPreferences(user.dietary_preferences || []);
       setAllergies(user.allergies || []);
       setDislikedIngredients(user.disliked_ingredients || []);
+      setFormData({
+        health_goal_id: user.health_goal_id || "",
+      });
     }
   }, [user]);
+
+  useEffect(() => {
+    fetchHealthGoals();
+  }, []);
 
   const cleanList = (list, type) =>
     list.map((item) => {
@@ -42,6 +52,12 @@ function Profile() {
             ingredient_name: item.ingredient_name || item.name,
             _destroy: isMarkedForDestroy,
           };
+        case "goal":
+          return {
+            id: item.id,
+            goal_name: item.goal_name || item.name,
+            _destroy: isMarkedForDestroy,
+          };
         default:
           return {};
       }
@@ -54,6 +70,7 @@ function Profile() {
       dietary_preferences_attributes: cleanList(dietaryPreferences, "dietary"),
       allergies_attributes: cleanList(allergies, "allergy"),
       disliked_ingredients_attributes: cleanList(dislikedIngredients, "disliked"),
+      health_goal_id: formData.health_goal_id,
     };
 
     const result = await updateProfile(profileData);
@@ -154,6 +171,24 @@ function Profile() {
         <button type="button" onClick={() => handleAdd(setDislikedIngredients, dislikedIngredients)}>
           Add Ingredient
         </button>
+
+        {/* Health Goals */}
+        <h3>Health Goals</h3>
+        <select
+          value={formData.health_goal_id || ""}
+          onChange={(e) =>
+          setFormData({ ...formData, health_goal_id: e.target.value })
+          }
+        >
+
+        <option value="">Select a health goal</option>
+        
+        {(healthGoals || []).map((goal) => (
+          <option key={goal.id} value={goal.id}>
+          {goal.goal_name}
+          </option>
+        ))}
+        </select>
 
         <br />
         <button type="submit">Save Changes</button>

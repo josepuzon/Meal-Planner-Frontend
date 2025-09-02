@@ -5,12 +5,22 @@ import { useNavigate, Link } from "react-router-dom";
 function Login() {
   const { register, handleSubmit } = useForm();
   const login = useAuthStore((state) => state.login);
+  const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     const result = await login(data);
     if (result.success) {
-      navigate("/dashboard");
+      const noPreferences =
+        !user?.dietary_preferences || user.dietary_preferences.length === 0;
+      const noGoals =
+        !user?.health_goals || user.health_goals.length === 0;
+
+      if (noPreferences && noGoals) {
+        navigate("/profile");
+      } else {
+        navigate("/dashboard");
+      }
     } else {
       alert(result.error);
     }

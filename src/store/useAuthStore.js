@@ -4,6 +4,7 @@ import api from "../api/axios";
 const useAuthStore = create((set, get) => ({
   user: JSON.parse(localStorage.getItem("user")) || null,
   token: localStorage.getItem("token") || null,
+  healthGoals: [],
 
   // 🔹 LOGIN
   login: async (credentials) => {
@@ -127,6 +128,20 @@ const useAuthStore = create((set, get) => ({
         success: false,
         error: err.response?.data?.errors || "Update failed",
       };
+    }
+  },
+
+  fetchHealthGoals: async () => {
+    try {
+      const res = await api.get("/health_goals", {
+        headers: { Authorization: `Bearer ${get().token}` },
+      });
+      set({ healthGoals: res.data });
+    } catch (err) {
+      console.error(
+        "Fetch health goals failed:",
+        err.response?.data || err.message
+      );
     }
   },
 }));
