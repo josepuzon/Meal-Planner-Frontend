@@ -19,11 +19,46 @@ function App() {
 
         {/* Protected Routes */}
         <Route element={<Layout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/meal-plans" element={<MealPlans />} />
-          <Route path="/recipes" element={<Recipes />} />
-          <Route path="/pantry" element={<Pantry />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/meal-plans"
+            element={
+              <ProtectedRoute>
+                <MealPlans />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/recipes"
+            element={
+              <ProtectedRoute>
+                <Recipes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pantry"
+            element={
+              <ProtectedRoute>
+                <Pantry />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </Router>
