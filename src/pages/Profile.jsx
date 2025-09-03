@@ -177,15 +177,15 @@ function Profile() {
         <select
           value={formData.health_goal_id || ""}
           onChange={(e) =>
-          setFormData({ ...formData, health_goal_id: e.target.value })
+            setFormData({ ...formData, health_goal_id: e.target.value })
           }
         >
 
         <option value="">Select a health goal</option>
-        
+
         {(healthGoals || []).map((goal) => (
           <option key={goal.id} value={goal.id}>
-          {goal.goal_name}
+            {goal.goal_name}
           </option>
         ))}
         </select>
