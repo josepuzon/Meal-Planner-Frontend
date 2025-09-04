@@ -101,14 +101,9 @@ function Recipes() {
                     {selectedRecipe.ingredients.map((ing, idx) => (
                       <li key={idx} className="flex justify-between">
                         <span>
-                          {ing.ingredient_name}{" "}
-                          {ing.quantity && `${ing.quantity} ${ing.unit || ""}`}
+                          {ing.quantity && `${ing.quantity} ${ing.unit || ""}`}{" "}
+                          {ing.ingredient_name}
                         </span>
-                        {ing.total_calories && (
-                          <span className="text-sm text-gray-500">
-                            {ing.total_calories.toFixed(1)} cal
-                          </span>
-                        )}
                       </li>
                     ))}
                   </ul>

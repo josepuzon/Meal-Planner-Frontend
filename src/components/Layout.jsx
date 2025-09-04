@@ -7,7 +7,7 @@ function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-500">
       {/* Navbar */}
       <nav className="bg-black shadow-md p-4 flex flex-col md:flex-row md:items-center md:justify-between">
         <div className="flex justify-between items-center">
@@ -45,7 +45,7 @@ function Layout() {
 
         {/* Links */}
         <div
-          className={`mt-2 md:mt-0 flex flex-col md:flex-row md:items-center gap-2 ${
+          className={`mt-2 md:mt-0 flex flex-col md:flex-row md:items-center gap-5 ${
             menuOpen ? "flex" : "hidden md:flex"
           }`}
         >

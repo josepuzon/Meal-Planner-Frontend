@@ -22,13 +22,14 @@ function MealPlans() {
       setLoadingRecipes(true);
       try {
         const res = await api.get("/recipes");
+        const recipeArray = Array.isArray(res.data) ? res.data : res.data.recipes || [];
         const map = {};
-        res.data.forEach((recipe) => {
+        recipeArray.forEach((recipe) => {
           map[recipe.id] = recipe;
         });
         setRecipesMap(map);
       } catch (err) {
-        console.error("Failed to fetch recipes:", err);
+        console.error("Failed to fetch recipes:", err, err.response?.data);
       } finally {
         setLoadingRecipes(false);
       }
@@ -36,6 +37,7 @@ function MealPlans() {
 
     fetchRecipes();
   }, []);
+
 
   const handleGenerate = async () => {
     const newPlan = await generateMealPlan();
@@ -48,7 +50,7 @@ function MealPlans() {
         <h2 className="text-2xl font-bold text-gray-800">Meal Plans</h2>
         <button
           onClick={handleGenerate}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-400 transition"
         >
           Generate 1-Day Meal Plan
         </button>

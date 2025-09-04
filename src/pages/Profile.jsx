@@ -131,7 +131,7 @@ function Profile() {
           {/* Health Goal */}
           <div className="mb-4">
             <p className="font-semibold text-gray-700 mb-1">Health Goal:</p>
-            <span className="bg-blue-100 text-blue-800 px-3 py-1.5 rounded-lg text-sm font-semibold">
+            <span className="text-blue-800 px-3 py-1.5 rounded-lg text-sm font-semibold">
               {healthGoals?.find(h => h.id === formData.health_goal_id)?.goal_name || "Not set"}
             </span>
           </div>
@@ -144,7 +144,7 @@ function Profile() {
                 ? dietaryPreferences.filter(p => !p._destroy).map((p, idx) => (
                     <span
                       key={idx}
-                      className="bg-green-100 text-green-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
+                      className="text-green-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
                     >
                       {p.name || p.pref_name}
                     </span>
@@ -161,7 +161,7 @@ function Profile() {
                 ? allergies.filter(a => !a._destroy).map((a, idx) => (
                     <span
                       key={idx}
-                      className="bg-red-100 text-red-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
+                      className="text-red-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
                     >
                       {a.name || a.allergy_name}
                     </span>
@@ -178,7 +178,7 @@ function Profile() {
                 ? dislikedIngredients.filter(d => !d._destroy).map((d, idx) => (
                     <span
                       key={idx}
-                      className="bg-gray-200 text-gray-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
+                      className="text-gray-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
                     >
                       {d.name || d.ingredient_name}
                     </span>
@@ -234,7 +234,7 @@ function Profile() {
         <div>
           <button
             type="submit"
-            className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            className="px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-400 transition"
           >
             Save Changes
           </button>
