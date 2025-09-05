@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import useAuthStore from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import useFlashStore from "../store/useFlashStore";
+
 
 function Register() {
   const { register, handleSubmit } = useForm();
@@ -22,10 +24,12 @@ function Register() {
     };
 
     const result = await signup(payload);
+
     if (result.success) {
+      useFlashStore.getState().setFlash({ type: "success", text: "Registered successfully!" });
       navigate("/dashboard");
     } else {
-      alert(result.error || "Registration failed");
+      useFlashStore.getState().setFlash({ type: "error", text: result.error || "Registration failed" });
     }
   };
 

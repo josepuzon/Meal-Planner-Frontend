@@ -9,6 +9,7 @@ function Recipes() {
     fetchRecipe,
     addRecipe,
     deleteRecipe,
+    rateRecipe,
   } = useRecipeStore();
 
   const [title, setTitle] = useState("");
@@ -44,6 +45,8 @@ function Recipes() {
     setTitle("");
     setInstructions("");
     setIngredients([{ ingredient_name: "", quantity: "", unit: "" }]);
+
+    fetchRecipes();
   };
 
   return (
@@ -155,6 +158,7 @@ function Recipes() {
             <div className="p-6 bg-gray-800 shadow rounded-xl border border-gray-700">
               <h3 className="text-xl font-semibold mb-4">{selectedRecipe.title}</h3>
 
+              {/* Ingredients */}
               {selectedRecipe.ingredients?.length > 0 ? (
                 <div className="mb-4">
                   <strong className="text-gray-300">Ingredients:</strong>
@@ -171,9 +175,37 @@ function Recipes() {
                 <p className="text-gray-400">No ingredients provided.</p>
               )}
 
+              {/* Instructions */}
               <p className="text-gray-300 whitespace-pre-line">
                 {selectedRecipe.instructions || "No instructions provided."}
               </p>
+
+              {/* Rating */}
+              <div className="mt-4">
+                <strong className="text-gray-300">Rate this recipe:</strong>
+                <div className="flex items-center mt-1 gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={async () => {
+                        const res = await rateRecipe(selectedRecipe.id, star);
+                        if (!res.success) alert(res.error);
+                      }}
+                      className={`text-xl ${
+                        selectedRecipe.user_rating >= star ? "text-yellow-400" : "text-gray-500"
+                      } hover:text-yellow-400 transition`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                  <span className="ml-2 text-gray-300 text-sm">
+                    {selectedRecipe.user_rating
+                      ? `You rated: ${selectedRecipe.user_rating} ⭐`
+                      : "Not rated yet"}
+                  </span>
+                </div>
+              </div>
             </div>
           ) : (
             <p className="text-gray-400">Select a recipe to view details.</p>

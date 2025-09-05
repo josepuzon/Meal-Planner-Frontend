@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore";
+import useFlashStore from "../store/useFlashStore";
 
 function Layout() {
   const { logout } = useAuthStore();
+  const { setFlash } = useFlashStore();
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    setFlash({ type: "success", text: "Logged out successfully!" });
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-500">
@@ -85,10 +94,7 @@ function Layout() {
             Profile
           </Link>
           <button
-            onClick={async () => {
-              await logout();
-              window.location.href = "/";
-            }}
+            onClick={handleLogout}
             className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
           >
             Logout

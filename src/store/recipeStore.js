@@ -2,7 +2,7 @@ import { create } from "zustand";
 import api from "../api/axios";
 import useAuthStore from "./useAuthStore";
 
-const useRecipeStore = create((set) => ({
+const useRecipeStore = create((set, get) => ({
   recipes: [],
   selectedRecipe: null,
 
@@ -78,6 +78,34 @@ const useRecipeStore = create((set) => ({
       }));
     } catch (err) {
       console.error("Delete recipe failed:", err.response?.data || err.message);
+    }
+  },
+
+  rateRecipe: async (recipeId, ratingValue) => {
+    try {
+      const res = await api.post(`/recipes/${recipeId}/rate`, {
+        rating: ratingValue,
+      });
+
+      const updatedRecipe = {
+        ...get().selectedRecipe,
+        user_rating: res.data.data.user_rating,
+      };
+
+      set({
+        selectedRecipe: updatedRecipe,
+        recipes: get().recipes.map((r) =>
+          r.id === recipeId ? updatedRecipe : r
+        ),
+      });
+
+      return { success: true, data: res.data.data };
+    } catch (err) {
+      console.error("Rating failed:", err.response?.data || err.message);
+      return {
+        success: false,
+        error: err.response?.data?.errors || "Rating failed",
+      };
     }
   },
 }));

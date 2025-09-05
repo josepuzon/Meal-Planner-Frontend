@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import useAuthStore from "../store/useAuthStore";
 import { useNavigate, Link } from "react-router-dom";
+import useFlashStore from "../store/useFlashStore";
+
 
 function Login() {
   const { register, handleSubmit } = useForm();
@@ -12,8 +14,11 @@ function Login() {
     const result = await login(data);
 
     if (!result.success) {
-      return alert(result.error);
+      useFlashStore.getState().setFlash({ type: "error", text: result.error });
+      return;
     }
+
+    useFlashStore.getState().setFlash({ type: "success", text: "Logged in successfully!" });
 
     try {
       // Fetch full profile after login
