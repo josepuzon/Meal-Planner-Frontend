@@ -48,7 +48,7 @@ const useRecipeStore = create((set) => ({
 
     try {
       const res = await api.post(
-        "/api/v1/recipes",
+        "/recipes",
         { recipe },
         { headers: { Authorization: `Bearer ${token}` } }
       );

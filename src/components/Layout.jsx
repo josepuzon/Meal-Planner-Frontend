@@ -54,7 +54,7 @@ function Layout() {
             className="text-gray-50 hover:text-blue-500 transition"
             onClick={() => setMenuOpen(false)}
           >
-            Dashboard
+            Home
           </Link>
           <Link
             to="/meal-plans"
@@ -100,6 +100,10 @@ function Layout() {
       <main className="flex-1 p-6 md:p-10">
         <Outlet />
       </main>
+
+      <footer className="bg-black py-6 text-center text-gray-400 text-sm">
+        © {new Date().getFullYear()} Keelo. All rights reserved.
+      </footer>
     </div>
   );
 }

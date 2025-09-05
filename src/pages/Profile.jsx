@@ -25,8 +25,8 @@ function CategoryCard({ title, list, setter, type, color }) {
   };
 
   return (
-    <div className="bg-white rounded shadow p-6 flex flex-col gap-3">
-      <h3 className="text-xl font-semibold">{title}</h3>
+    <div className="bg-gray-800 rounded-xl shadow p-6 flex flex-col gap-3 border border-gray-700">
+      <h3 className="text-xl font-semibold text-gray-100">{title}</h3>
       <div className="flex flex-wrap gap-2">
         {visibleList.map((item, idx) => (
           <div
@@ -42,7 +42,7 @@ function CategoryCard({ title, list, setter, type, color }) {
                 item.ingredient_name
               }
               onChange={(e) => handleChange(idx, e.target.value)}
-              className="bg-transparent focus:outline-none text-sm"
+              className="bg-transparent focus:outline-none text-sm text-gray-900"
             />
             <button
               type="button"
@@ -108,82 +108,82 @@ function Profile() {
     alert(result.success ? "Profile updated!" : "Update failed: " + result.error);
   };
 
-  if (!user) return <p className="text-gray-500">Loading profile...</p>;
+  if (!user) return <p className="text-gray-400">Loading profile...</p>;
 
   return (
-    <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">My Profile</h2>
+    <div className="p-6 md:p-10 bg-gray-900 min-h-screen text-gray-100">
+      <h2 className="text-3xl font-bold mb-6">My Profile</h2>
 
       {/* Top Cards: Personal Info & Health & Preferences */}
       <div className="grid md:grid-cols-2 gap-6 mb-8">
         {/* Personal Info Card */}
-        <div className="bg-white rounded shadow p-6">
-          <h3 className="text-xl font-semibold mb-5">Personal Information</h3>
-          <p className="mb-5"><span className="font-semibold text-gray-700">First Name:</span> {user.first_name}</p>
-          <p className="mb-5"><span className="font-semibold text-gray-700">Last Name:</span> {user.last_name}</p>
-          <p className="mb-5"><span className="font-semibold text-gray-700">Email:</span> {user.email}</p>
+        <div className="bg-gray-800 rounded-xl shadow p-6 border border-gray-700">
+          <h3 className="text-xl font-semibold mb-5 text-gray-100">Personal Information</h3>
+          <p className="mb-5"><span className="font-semibold text-gray-300">First Name:</span> {user.first_name}</p>
+          <p className="mb-5"><span className="font-semibold text-gray-300">Last Name:</span> {user.last_name}</p>
+          <p className="mb-5"><span className="font-semibold text-gray-300">Email:</span> {user.email}</p>
         </div>
 
         {/* Health & Preferences Card */}
-        <div className="bg-white rounded shadow p-6">
-          <h3 className="text-xl font-semibold mb-3">Health & Preferences</h3>
+        <div className="bg-gray-800 rounded-xl shadow p-6 border border-gray-700">
+          <h3 className="text-xl font-semibold mb-3 text-gray-100">Health & Preferences</h3>
 
           {/* Health Goal */}
           <div className="mb-4">
-            <p className="font-semibold text-gray-700 mb-1">Health Goal:</p>
-            <span className="text-blue-800 px-3 py-1.5 rounded-lg text-sm font-semibold">
+            <p className="font-semibold text-gray-300 mb-1">Health Goal:</p>
+            <span className="text-blue-400 px-3 py-1.5 rounded-lg text-sm font-semibold">
               {healthGoals?.find(h => h.id === formData.health_goal_id)?.goal_name || "Not set"}
             </span>
           </div>
 
           {/* Dietary Preferences */}
           <div className="mb-4">
-            <p className="font-semibold text-gray-700 mb-1">Dietary Preferences:</p>
+            <p className="font-semibold text-gray-300 mb-1">Dietary Preferences:</p>
             <div className="flex flex-wrap gap-3">
               {dietaryPreferences.filter(p => !p._destroy).length
                 ? dietaryPreferences.filter(p => !p._destroy).map((p, idx) => (
                     <span
                       key={idx}
-                      className="text-green-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
+                      className="text-green-400 px-3 py-1.5 rounded-lg text-sm font-semibold"
                     >
                       {p.name || p.pref_name}
                     </span>
                   ))
-                : <span className="text-gray-500">None</span>}
+                : <span className="text-gray-400">None</span>}
             </div>
           </div>
 
           {/* Allergies */}
           <div className="mb-4">
-            <p className="font-semibold text-gray-700 mb-1">Allergies:</p>
+            <p className="font-semibold text-gray-300 mb-1">Allergies:</p>
             <div className="flex flex-wrap gap-3">
               {allergies.filter(a => !a._destroy).length
                 ? allergies.filter(a => !a._destroy).map((a, idx) => (
                     <span
                       key={idx}
-                      className="text-red-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
+                      className="text-red-500 px-3 py-1.5 rounded-lg text-sm font-semibold"
                     >
                       {a.name || a.allergy_name}
                     </span>
                   ))
-                : <span className="text-gray-500">None</span>}
+                : <span className="text-gray-400">None</span>}
             </div>
           </div>
 
           {/* Disliked Ingredients */}
           <div>
-            <p className="font-semibold text-gray-700 mb-1">Disliked Ingredients:</p>
+            <p className="font-semibold text-gray-300 mb-1">Disliked Ingredients:</p>
             <div className="flex flex-wrap gap-3">
               {dislikedIngredients.filter(d => !d._destroy).length
                 ? dislikedIngredients.filter(d => !d._destroy).map((d, idx) => (
                     <span
                       key={idx}
-                      className="text-gray-800 px-3 py-1.5 rounded-lg text-sm font-semibold"
+                      className="text-red-700 px-3 py-1.5 rounded-lg text-sm font-semibold"
                     >
                       {d.name || d.ingredient_name}
                     </span>
                   ))
-                : <span className="text-gray-500">None</span>}
+                : <span className="text-gray-400">None</span>}
             </div>
           </div>
         </div>
@@ -192,12 +192,12 @@ function Profile() {
       {/* Profile form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Health Goal Card */}
-        <div className="bg-white rounded shadow p-6">
-          <h3 className="text-xl font-semibold mb-4">Health Goal</h3>
+        <div className="bg-gray-800 rounded-xl shadow p-6 border border-gray-700">
+          <h3 className="text-xl font-semibold mb-4 text-gray-100">Health Goal</h3>
           <select
             value={formData.health_goal_id || ""}
             onChange={(e) => setFormData({ ...formData, health_goal_id: e.target.value })}
-            className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full md:w-1/2 px-3 py-2 border border-gray-600 rounded bg-gray-900 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select a health goal</option>
             {(healthGoals || []).map((goal) => (
@@ -234,7 +234,7 @@ function Profile() {
         <div>
           <button
             type="submit"
-            className="px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-400 transition"
+            className="px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition"
           >
             Save Changes
           </button>
